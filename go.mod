@@ -1,4 +1,4 @@
-module wm
+module github.com/Hoss-Mobility/wm
 
 go 1.22
 

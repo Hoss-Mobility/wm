@@ -1,9 +1,9 @@
 package wm
 
 import (
+	"github.com/Hoss-Mobility/wm/internal"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"wm/internal"
 )
 
 var secretItem = internal.SecretItem{

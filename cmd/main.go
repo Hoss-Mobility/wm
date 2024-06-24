@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"wm"
-	"wm/internal"
+	"github.com/Hoss-Mobility/wm"
+	"github.com/Hoss-Mobility/wm/internal"
 )
 
 func main() {
