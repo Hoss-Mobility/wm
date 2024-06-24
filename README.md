@@ -7,6 +7,10 @@ Typical REST servers consist of the following parts: Persistence layer (DB), RES
 With `wm` it is possible to convert your DB model to a web model, **without** manually creating or generating web models.
 To define which fields should be visible to what roles, just add struct tags and call `ToWeb()`.
 
+<p align="center">
+	<img src="https://dibiasi.dev/share/wm.jpg" width=30% height=30% class="center">
+</p>
+
 ## Getting started
 `wm` uses [struct tags](https://go.dev/ref/spec#Tag) and predefined authorization labels.
 Just add the name of a role to your struct and set one of the following tags.
