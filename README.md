@@ -1,4 +1,4 @@
-# `wm` - **W**eb Model Role **M**apper
+# `wm` - **W**ebmodel Role **M**apper
 The **W**eb Model Role**M**apper solves a problem as old as multiuser data access:
 **How to define which fields certain users are allowed to access.**
 
