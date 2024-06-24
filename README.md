@@ -23,7 +23,7 @@ Multiple roles can be used in one `wm` prefixed struct tag, to define fine granu
 type SmallExample struct {
 	// Staff is only allowed read the Name field
 	// Developers and admins are also allowed to write / change it
-	Name               string `wm:"staff:r;developer:rw;admin:rw"`
+	Name          string `wm:"staff:r;developer:rw;admin:rw"`
 }
 ```
 
@@ -64,20 +64,20 @@ a recipe, but are not allowed to write / change the name.
 type Recipe struct {
     Name               string `json:"name" wm:"staff:r;admin:rw" `
     Details            string `json:"details" wm:"staff:rw;admin:rw"`
-	SecretIngredients  string `json:"secret_ingredients,omitempty" wm:"admin:rw"`
+    SecretIngredients  string `json:"secret_ingredients,omitempty" wm:"admin:rw"`
 }
 
 func GetRecipe(database db.YourDbHandler, manager *scs.SessionManager) http.HandlerFunc {
     return func (w http.ResponseWriter, r *http.Request) {
         // user role is set on session via middleware
         userRole := manager.GetString(r.Context(), "USER_ROLE_KEY")
-		// get data from db
+        // get data from db
         dbRecipe, err := database.GetRecipe("crabburger")
-		if err != nil {...}
-		// convert to web model
+        if err != nil {...}
+        // convert to web model
         webRecipe, err := wm.ToWeb(dbRecipe, userRole)
         if err != nil {...}
-		// render web model
+        // render web model
         render.Status(r, http.StatusOK)
         render.JSON(w, r, webRecipe)
     }
@@ -93,7 +93,7 @@ func PostRecipe(database db.YourDbHandler, manager *scs.SessionManager) http.Han
         // convert to db model
         dbRecipe, err := wm.ToDb(webRecipe, userRole)
         if err != nil {...}
-		// store in db
+        // store in db
         dbRecipe, err := database.AddRecipe(dbRecipe)
         if err != nil {...}
         // set status to ok
