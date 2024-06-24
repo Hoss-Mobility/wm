@@ -11,6 +11,14 @@ To define which fields should be visible to what roles, just add struct tags and
 	<img src="https://dibiasi.dev/share/wm.jpg" width=30% height=30% class="center">
 </p>
 
+
+## Installation
+This package requires Go 1.12 or newer. [Versioned releases](https://github.com/Hoss-Mobility/wm/releases) are available.
+
+```sh
+go get github.com/Hoss-Mobility/wm
+```
+
 ## Getting started
 `wm` uses [struct tags](https://go.dev/ref/spec#Tag) and predefined authorization labels.
 Just add the name of a role to your struct and set one of the following tags.
