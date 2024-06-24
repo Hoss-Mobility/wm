@@ -1,8 +1,8 @@
-# `wm` - **W**ebmodel Role **M**apper
-The **W**eb Model Role**M**apper solves a problem as old as multiuser data access:
+# `wm` - A role based **W**ebmodel **M**apper
+`wm` solves a problem as old as multiuser data access:
 **How to define which fields certain users are allowed to access.**
 
-Typical REST servers consist of the following parts: Persistence layer (DB), REST Routing, User Auth (OAuth), et cetera.
+Typically users accessing REST routes are authenticated via some form of identity provider. 
 `wm` bridges the gap between the persistence layer, User Auth and exposing models via REST (or other technologies).
 With `wm` it is possible to convert your DB model to a web model, **without** manually creating or generating web models.
 To define which fields should be visible to what roles, just add struct tags and call `ToWeb()`.
