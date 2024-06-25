@@ -109,3 +109,51 @@ func PostRecipe(database db.YourDbHandler, manager *scs.SessionManager) http.Han
     }
 }
 ```
+
+## Showcase
+The following code snippets showcase the example `main.go` included in the `wm` module.
+Specific fields of `SecretItem` are only visible to specified roles.
+
+```go
+type SecretItem struct {
+	Name               string `wm:"staff:r;developer:rw;admin:rw"`
+	Comment            string `wm:"staff:rw;developer:rw;admin:rw"`
+	SecretInfo         string `wm:"developer:r;admin:rw"`
+	TopSecret          string `wm:"admin:rw"`
+	CanOnlyBeWrittenTo string `wm:"staff:w;developer:w;admin:rw"`
+}
+```
+
+The following snippet highlights what data each role sees:
+```go
+ToWeb()
+---------------
+staff sees: 
+internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}
+
+developer sees: 
+internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"", CanOnlyBeWrittenTo:""}
+
+admin sees: 
+internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}
+
+unauthorized sees: 
+internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}
+```
+
+```go
+ToDb()
+---------------
+staff can set: 
+internal.SecretItem{Name:"", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}
+
+developer can set: 
+internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}
+
+admin can set: 
+internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}
+
+unauthorized can set: 
+internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}
+```
+
