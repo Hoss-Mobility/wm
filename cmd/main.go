@@ -28,10 +28,27 @@ func main() {
 
 	fmt.Printf("\nToDb()\n---------------\n")
 	for _, role := range roles {
-		webModel, err := wm.ToDb(secretItem, role)
+		dbModel, err := wm.ToDb(secretItem, role)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("%s can set: \n%#v\n\n", role, webModel)
+		fmt.Printf("%s can set: \n%#v\n\n", role, dbModel)
+	}
+
+	update := internal.SecretItem{
+		Name:               "Updated",
+		Comment:            "Updated",
+		SecretInfo:         "Updated",
+		TopSecret:          "Updated",
+		CanOnlyBeWrittenTo: "Updated",
+	}
+
+	fmt.Printf("\nApplyUpdate()\n---------------\n")
+	for _, role := range roles {
+		updatedModel, err := wm.ApplyUpdate(secretItem, update, role)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("%s can set: \n%#v\n\n", role, updatedModel)
 	}
 }
