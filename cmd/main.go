@@ -15,6 +15,8 @@ func main() {
 		CanOnlyBeWrittenTo: "Hecho en Crustáceo Cascarudo",
 	}
 
+	secretsSlice := []internal.SecretItem{secretItem, secretItem, secretItem}
+
 	roles := []string{"staff", "developer", "admin", "unauthorized"}
 
 	fmt.Printf("ToWeb()\n---------------\n")
@@ -50,5 +52,23 @@ func main() {
 			panic(err)
 		}
 		fmt.Printf("%s can set: \n%#v\n\n", role, updatedModel)
+	}
+
+	fmt.Printf("\nSliceToWeb()\n---------------\n")
+	for _, role := range roles {
+		webSlice, err := wm.SliceToWeb(secretsSlice, role)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("%s can set: \n%#v\n\n", role, webSlice)
+	}
+
+	fmt.Printf("\nSliceToDb()\n---------------\n")
+	for _, role := range roles {
+		webSlice, err := wm.SliceToDb(secretsSlice, role)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("%s can set: \n%#v\n\n", role, webSlice)
 	}
 }

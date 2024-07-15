@@ -29,10 +29,38 @@ func ToWeb[T any](dbModel T, role string) (webModel *T, err error) {
 	return doMapping(dbModel, nil, role, toWebActions)
 }
 
+// SliceToWeb converts a slice of dbModels to a slice of webModels.
+// Only sets fields on webModels the supplied role is allowed to read from (R or RW).
+func SliceToWeb[T any](dbSlice []T, role string) (*[]T, error) {
+	webSlice := make([]T, len(dbSlice))
+	for i, item := range dbSlice {
+		m, err := doMapping(item, nil, role, toWebActions)
+		if err != nil {
+			return nil, err
+		}
+		webSlice[i] = *m
+	}
+	return &webSlice, nil
+}
+
 // ToDb converts webModel to a dbModel.
 // Only sets fields on dbModel the supplied role is allowed to write to (W or RW).
 func ToDb[T any](webModel T, role string) (dbModel *T, err error) {
 	return doMapping(webModel, nil, role, toDBActions)
+}
+
+// SliceToDb converts a slice of webModels to a slice of dbModels.
+// Only sets fields on dbModels the supplied role is allowed to write to (W or RW).
+func SliceToDb[T any](webSlice []T, role string) (*[]T, error) {
+	dbSlice := make([]T, len(webSlice))
+	for i, item := range webSlice {
+		m, err := doMapping(item, nil, role, toDBActions)
+		if err != nil {
+			return nil, err
+		}
+		dbSlice[i] = *m
+	}
+	return &dbSlice, nil
 }
 
 // ApplyUpdate applies changes from newModel to oldModel.

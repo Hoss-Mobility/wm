@@ -89,6 +89,39 @@ updatedModel, err := wm.ApplyUpdate(old, new, role)
 // }
 ```
 
+`SliceToDb` and `SliceToWeb` work the same as `ToDb` and `ToWeb`, but take slices
+instead of single structs.
+```go
+cat1 := SmallExample{Name: "Linus the cat", Comment: "A heckin' chonker"}
+cat2 := SmallExample{Name: "Franz", Comment: "MEGACHONKER"}
+cats := []SmallExample{cat1, cat2}
+
+role := "staff"
+dbCats, err := wm.SliceToDb(cats, role)
+// [
+//   {
+//      "Name": "",
+//      "Comment": "A heckin' chonker"
+//   },
+//   {
+//      "Name": "",
+//      "Comment": "MEGACHONKER"
+//   },
+// ]
+
+webCats, err := wm.SliceWeb(cats, role)
+// [
+//   {
+//      "Name": "Linus the cat",
+//      "Comment": "A heckin' chonker"
+//   },
+//   {
+//      "Name": "Franz",
+//      "Comment": "MEGACHONKER"
+//   },
+// ]
+```
+
 Please do not rely solely on `wm` to "sanitize" your models before storing it in the database. 
 Make sure to check for SQL injections and other malicious techniques.
 
@@ -223,5 +256,38 @@ admin can set:
 
 unauthorized can set:
 &internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}
+```
+
+Slice operations:
+```go
+
+SliceToWeb()
+---------------
+staff can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}}
+
+developer can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"", CanOnlyBeWrittenTo:""}}
+
+admin can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTnfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}}
+
+unauthorized can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}}
+
+
+SliceToDb()
+---------------
+staff can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}}
+
+developer can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}}
+
+admin can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}, internal.SecretItem{Name:"Crab Burger Recipe", Comment:"The recipe of the famous crusty crab burger", SecretInfo:"Bun, Pickle, Patty, Lettuce", TopSecret:"Do not forget the tomato", CanOnlyBeWrittenTo:"Hecho en Crustáceo Cascarudo"}}
+
+unauthorized can set: 
+&[]internal.SecretItem{internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}, internal.SecretItem{Name:"", Comment:"", SecretInfo:"", TopSecret:"", CanOnlyBeWrittenTo:""}}
 ```
 
